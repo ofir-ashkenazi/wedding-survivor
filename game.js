@@ -60,7 +60,15 @@
     try { window.localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ }
   }
 
-  const reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  // Screens and overlays are toggled with the `hidden` attribute. Install the rule
+  // here too, so they still hide when a browser holds an older cached style.css.
+  (function ensureHiddenRule() {
+    const s = document.createElement('style');
+    s.textContent = '[hidden]{display:none !important}';
+    document.head.appendChild(s);
+  })();
+
+  const reducedMotion =!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const $ = (id) => document.getElementById(id);
 
   // ===================================================================
