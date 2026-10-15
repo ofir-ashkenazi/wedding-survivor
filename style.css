@@ -90,7 +90,6 @@ button:focus-visible, input:focus-visible + span {
   color: var(--muted);
   display: flex; justify-content: space-between; gap: 8px;
 }
-.m-label i { font-family: var(--body); font-style: normal; text-transform: none; letter-spacing: 0; }
 .m-track {
   display: block; height: 10px;
   background: var(--ink);
@@ -103,11 +102,9 @@ button:focus-visible, input:focus-visible + span {
   background: var(--gold);
   transition: width 0.15s linear;
 }
-#m-buzz .m-fill { background: var(--sky); }
 #m-battery .m-fill { background: var(--mint); }
 #m-battery.low .m-fill { background: var(--danger); animation: blink 0.6s steps(2) infinite; }
 #m-food.low .m-fill { background: var(--danger); }
-#m-buzz.high .m-fill { background: var(--rose); }
 
 .chips { display: flex; flex-wrap: wrap; gap: 4px; min-height: 0; }
 .chips:empty { display: none; }
@@ -190,7 +187,6 @@ button:focus-visible, input:focus-visible + span {
 }
 .convo-who { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
 #convo-name { font-family: var(--display); font-size: var(--step-0); color: var(--rose); }
-#convo-he { color: var(--muted); }
 #convo-line { margin: 6px 0 10px; font-size: var(--step-1); }
 .convo-bar { height: 12px; border: 2px solid var(--line); background: var(--ink); position: relative; }
 #convo-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--mint); }
@@ -277,7 +273,6 @@ button:focus-visible, input:focus-visible + span {
   text-shadow: 4px 4px 0 var(--rose), 8px 8px 0 var(--ink);
   text-wrap: balance;
 }
-.he-title { margin: 6px 0 0; font-size: var(--step-1); font-weight: 500; color: var(--rose); }
 .lede { margin: 0; max-width: 46ch; color: var(--muted); text-wrap: balance; }
 
 .creator {
@@ -408,9 +403,8 @@ kbd {
   .arch-row { grid-template-columns: minmax(0, 1fr); }
   #btn-start { justify-self: stretch; }
   #minimap { display: none; }
-  .meters { width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 8px; }
+  .meters { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 8px; }
   .meters .chips { grid-column: 1 / -1; }
-  .m-label i { display: none; }
   .clock-box { margin-left: 0; flex: 1; min-width: 0; }
   .score-box { flex: 1; min-width: 0; }
   #toast { top: calc(170px + env(safe-area-inset-top, 0px)); }

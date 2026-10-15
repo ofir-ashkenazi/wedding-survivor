@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Silkscreen:wght@400;700&display=swap">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <!--APP-->
@@ -21,15 +21,11 @@
     <div class="hud-row">
       <div class="panel meters">
         <div class="meter" id="m-food">
-          <span class="m-label">Food <i lang="he">אוכל</i></span>
-          <span class="m-track"><span class="m-fill"></span></span>
-        </div>
-        <div class="meter" id="m-buzz">
-          <span class="m-label">Buzz <i lang="he">באזז</i></span>
+          <span class="m-label">Food</span>
           <span class="m-track"><span class="m-fill"></span></span>
         </div>
         <div class="meter" id="m-battery">
-          <span class="m-label">Social battery <i lang="he">סוללה חברתית</i></span>
+          <span class="m-label">Social battery</span>
           <span class="m-track"><span class="m-fill"></span></span>
         </div>
         <div id="chips" class="chips"></div>
@@ -54,7 +50,7 @@
   </div>
 
   <div id="convo" hidden>
-    <div class="convo-who"><span id="convo-name"></span><span id="convo-he" lang="he" dir="rtl"></span></div>
+    <div class="convo-who"><span id="convo-name"></span></div>
     <p id="convo-line"></p>
     <div class="convo-bar"><span id="convo-fill"></span></div>
     <p class="convo-hint" id="convo-hint">Mash the arrow keys to wriggle free</p>
@@ -72,7 +68,7 @@
     </div>
     <div class="touch-right">
       <button type="button" id="btn-pause" aria-label="Pause">II</button>
-      <button type="button" id="btn-action">L'chaim</button>
+      <button type="button" id="btn-action">Cheers</button>
     </div>
   </div>
 
@@ -82,8 +78,7 @@
       <header class="invite">
         <p class="eyebrow">Noa &amp; Daniel request your survival</p>
         <h1>Wedding<br>Survivor</h1>
-        <p class="he-title" lang="he" dir="rtl">שורדים את החתונה</p>
-        <p class="lede">Eat everything, dodge every relative, and make it to 02:00 with your social battery intact.</p>
+        <p class="lede">Drop your gift at the gift table, then eat everything and dodge every relative. If your food or your social battery runs out before 02:00, the night is over.</p>
       </header>
 
       <form id="creator" class="creator" autocomplete="off">
@@ -141,6 +136,7 @@
       <footer class="controls">
         <span><kbd>WASD</kbd>/<kbd>Arrows</kbd> move</span>
         <span><kbd>E</kbd>/<kbd>Space</kbd> raise a drink: escape a talk or shake off chasers</span>
+        <span>Drop your gift first, then eat</span>
         <span>Stand still in flowers to hide</span>
         <span><kbd>P</kbd> pause · <kbd>M</kbd> mute</span>
       </footer>
@@ -180,6 +176,6 @@
   </section>
 </div>
 <!--/APP-->
-<script src="game.js?v=3"></script>
+<script src="game.js?v=4"></script>
 </body>
 </html>

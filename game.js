@@ -218,16 +218,16 @@
   const WORLD_W = 2000;
   const WORLD_H = 1400;
   const WALL = 20;
-  const NIGHT_SECONDS = 300;            // real seconds from 19:30 to 02:00
+  const NIGHT_SECONDS = 180;            // real seconds from 19:30 to 02:00 (3 minutes)
   const START_MIN = 19 * 60 + 30;
   const END_MIN = 26 * 60;              // 02:00 the next morning
 
   const ZONES = [
-    { id: 'reception', name: 'Reception', he: 'קבלת פנים', x: 0, y: 0, w: 960, h: 620, map: '#c9b48f' },
-    { id: 'chuppah', name: 'Chuppah', he: 'חופה', x: 960, y: 0, w: 1040, h: 620, map: '#5d9a55' },
-    { id: 'bar', name: 'Bar & Restrooms', he: 'בר ושירותים', x: 0, y: 620, w: 2000, h: 180, map: '#7a5136' },
-    { id: 'dining', name: 'Dining Hall', he: 'שולחנות', x: 0, y: 800, w: 1040, h: 600, map: '#6b1f35' },
-    { id: 'dance', name: 'Dance Floor', he: 'רחבת ריקודים', x: 1040, y: 800, w: 960, h: 600, map: '#3a2a55' },
+    { id: 'reception', name: 'Reception', x: 0, y: 0, w: 960, h: 620, map: '#c9b48f' },
+    { id: 'chuppah', name: 'Chuppah', x: 960, y: 0, w: 1040, h: 620, map: '#5d9a55' },
+    { id: 'bar', name: 'Bar & Restrooms', x: 0, y: 620, w: 2000, h: 180, map: '#7a5136' },
+    { id: 'dining', name: 'Dining Hall', x: 0, y: 800, w: 1040, h: 600, map: '#6b1f35' },
+    { id: 'dance', name: 'Dance Floor', x: 1040, y: 800, w: 960, h: 600, map: '#3a2a55' },
   ];
   const ZONE_BY_ID = {};
   ZONES.forEach((z) => { ZONE_BY_ID[z.id] = z; });
@@ -328,10 +328,10 @@
   }
 
   // Reception
-  F('station', 320, 36, 240, 34, { label: 'Finger food', he: 'פינגר פוד' });
+  F('station', 320, 36, 240, 34, { label: 'Finger food' });
   F('station', 34, 250, 34, 200, { vertical: true });
   [[180, 180], [600, 170], [760, 330], [250, 430], [560, 450]].forEach(([x, y]) => roundTable('cocktail', x, y, 20));
-  F('gifts', 820, 520, 70, 44);
+  const GIFT_TABLE = F('gifts', 820, 520, 70, 44);
   // Chuppah
   F('post', 1400, 70, 10, 10); F('post', 1550, 70, 10, 10);
   F('post', 1400, 180, 10, 10); F('post', 1550, 180, 10, 10);
@@ -341,8 +341,8 @@
   F('cooler', 990, 636, 26, 24);
   F('sofa', 1740, 636, 180, 22);
   // Dining hall
-  F('buffet', 110, 826, 290, 34, { label: 'Main course', he: 'מנה עיקרית' });
-  F('dessert', 640, 826, 300, 34, { label: 'Desserts', he: 'קינוחים' });
+  F('buffet', 110, 826, 290, 34, { label: 'Main course' });
+  F('dessert', 640, 826, 300, 34, { label: 'Desserts' });
   [1010, 1240].forEach((y) => [170, 400, 630, 860].forEach((x) => roundTable('table', x, y, 44)));
   // Dance hall
   const BOOTH = F('booth', 1850, 1020, 110, 130, { dynamic: true });
@@ -365,16 +365,16 @@
   // ---- Food & drink ----
   const VARIANTS = {
     canape: [
-      { n: 'Mini burger', he: 'מיני בורגר' }, { n: 'Sushi roll', he: 'סושי' },
-      { n: 'Kebab skewer', he: 'שיפוד קבב' }, { n: 'Mushroom tart', he: 'טארט פטריות' },
+      { n: 'Mini burger' }, { n: 'Sushi roll' },
+      { n: 'Kebab skewer' }, { n: 'Mushroom tart' },
     ],
     main: [
-      { n: 'Schnitzel', he: 'שניצל' }, { n: 'Entrecôte', he: 'אנטריקוט' },
-      { n: 'Grilled salmon', he: 'סלמון' }, { n: 'Stuffed peppers', he: 'פלפלים ממולאים' },
+      { n: 'Schnitzel' }, { n: 'Entrecôte' },
+      { n: 'Grilled salmon' }, { n: 'Stuffed peppers' },
     ],
-    dessert: [{ n: 'Malabi', he: 'מלבי' }, { n: 'Chocolate soufflé', he: 'סופלה' }, { n: 'Wedding cake', he: 'עוגת חתונה' }],
-    drink: [{ n: 'Arak', he: 'ערק' }, { n: 'Red wine', he: 'יין אדום' }, { n: 'Chaser', he: "צ'ייסר" }, { n: 'Beer', he: 'בירה' }],
-    water: [{ n: 'Cold water', he: 'מים קרים' }],
+    dessert: [{ n: 'Malabi' }, { n: 'Chocolate soufflé' }, { n: 'Wedding cake' }],
+    drink: [{ n: 'Arak' }, { n: 'Red wine' }, { n: 'Chaser' }, { n: 'Beer' }],
+    water: [{ n: 'Cold water' }],
   };
   const RESPAWN = { canape: 10, main: 14, dessert: 16, drink: 9, water: 12 };
 
@@ -390,13 +390,13 @@
 
   // ---- The night's schedule ----
   const EVENTS = [
-    { at: 19 * 60 + 30, id: 'arrival', title: 'Guests arriving', he: 'קבלת פנים', desc: 'Grab finger food in Reception. The buffet opens after the chuppah.' },
-    { at: 20 * 60 + 30, id: 'ceremony', title: 'Chuppah ceremony', he: 'חופה', desc: 'Stand in the Chuppah area for points and calm. Relatives there sit quietly.' },
-    { at: 21 * 60 + 5, id: 'dinner', title: 'Mazal tov! Dinner is served', he: 'ארוחת ערב', desc: 'The glass is broken. Main courses are out in the Dining Hall.' },
-    { at: 22 * 60 + 15, id: 'dance1', title: 'First dance set', he: 'סט ראשון', desc: 'Dance-floor points x2. The crowd hides you. A second photographer arrives.' },
-    { at: 23 * 60 + 45, id: 'shots', title: 'Chasers at the bar', he: "צ'ייסרים", desc: 'Drinks score double. Another uncle has found the arak.' },
-    { at: 24 * 60 + 30, id: 'dance2', title: 'Mizrahi set', he: 'סט מזרחי', desc: 'Dance-floor points x2. Another aunt has questions.' },
-    { at: 25 * 60 + 15, id: 'dessert', title: 'Desserts & last call', he: 'קינוחים', desc: 'Desserts refill fast. Hang on until 02:00.' },
+    { at: 19 * 60 + 30, id: 'arrival', title: 'Guests arriving', desc: 'Drop your gift at the gift table in Reception. You cannot eat or drink until you do.' },
+    { at: 20 * 60 + 30, id: 'ceremony', title: 'Chuppah ceremony', desc: 'Stand in the Chuppah area for points and calm. Relatives there sit quietly.' },
+    { at: 21 * 60 + 5, id: 'dinner', title: 'Mazal tov! Dinner is served', desc: 'The glass is broken. Main courses are out in the Dining Hall.' },
+    { at: 22 * 60 + 15, id: 'dance1', title: 'First dance set', desc: 'Dance-floor points x2. The crowd hides you. A second photographer and another sugar-rush kid arrive.' },
+    { at: 23 * 60 + 45, id: 'shots', title: 'Chasers at the bar', desc: 'Drinks score double. Another drunk uncle and another cringe acquaintance have found the bar.' },
+    { at: 24 * 60 + 30, id: 'dance2', title: 'Mizrahi set', desc: 'Dance-floor points x2. Another nosy aunt and a second wedding planner are on patrol.' },
+    { at: 25 * 60 + 15, id: 'dessert', title: 'Desserts & last call', desc: "Desserts refill fast. Grandma's sister has arrived. Hang on until 02:00." },
   ];
   const EVENT_INDEX = {};
   EVENTS.forEach((e, i) => { EVENT_INDEX[e.id] = i; });
@@ -405,9 +405,9 @@
   // 4. Characters
   // ===================================================================
   const ARCH = {
-    dancer: { label: 'Young wild dancer', speed: 140, hungerDecay: 1.1, foodMul: 1, drainMul: 1, buzzDecay: 0.8, danceMul: 2, stats: { Speed: 1, Appetite: 0.45, Patience: 0.45 } },
-    hungry: { label: 'Hungry relative', speed: 118, hungerDecay: 1.5, foodMul: 1.6, drainMul: 1, buzzDecay: 0.6, danceMul: 1, stats: { Speed: 0.55, Appetite: 1, Patience: 0.5 } },
-    chill: { label: 'Chill guest', speed: 126, hungerDecay: 1.0, foodMul: 1, drainMul: 0.65, buzzDecay: 0.6, danceMul: 1, stats: { Speed: 0.75, Appetite: 0.5, Patience: 1 } },
+    dancer: { label: 'Young wild dancer', speed: 140, hungerDecay: 1.1, foodMul: 1, drainMul: 1, danceMul: 2, stats: { Speed: 1, Appetite: 0.45, Patience: 0.45 } },
+    hungry: { label: 'Hungry relative', speed: 118, hungerDecay: 1.5, foodMul: 1.6, drainMul: 1, danceMul: 1, stats: { Speed: 0.55, Appetite: 1, Patience: 0.5 } },
+    chill: { label: 'Chill guest', speed: 126, hungerDecay: 1.0, foodMul: 1, drainMul: 0.65, danceMul: 1, stats: { Speed: 0.75, Appetite: 0.5, Patience: 1 } },
   };
 
   const OUTFIT_COLORS = [
@@ -457,34 +457,46 @@
 
   const NPC_TYPES = {
     uncle: {
-      name: 'The Drunk Uncle', he: 'הדוד השיכור', detect: 'radius', range: 120, speed: 50, chase: 84, contact: 'hug',
+      name: 'The Drunk Uncle', detect: 'radius', range: 120, speed: 50, chase: 84, contact: 'hug',
       look: { skin: '#e0ac80', hair: '#3a2a20', hairStyle: 'bald', top: '#5b6e8c', bottom: '#2b2b33', shirt: '#ffffff', tie: '#b23a48', acc: 'kippah', belly: true },
-      lines: ['Come here! Give your uncle a hug!', 'לחיים!', 'I changed your diapers, you know!', 'One more chaser, together!'],
-      chaseLines: ['Heyyy! Where are you going?', 'בוא בוא בוא!', 'Wait for your uncle!'],
+      lines: ['Come here! Give your uncle a hug!', 'Cheers! To life!', 'I changed your diapers, you know!', 'One more chaser, together!'],
+      chaseLines: ['Heyyy! Where are you going?', 'Come come come!', 'Wait for your uncle!'],
     },
     aunt: {
-      name: 'The Nosy Aunt', he: 'הדודה החוקרת', detect: 'cone', range: 210, fov: 1.3, speed: 48, chase: 96, contact: 'talk', drain: 7,
+      name: 'The Nosy Aunt', detect: 'cone', range: 210, fov: 1.3, speed: 48, chase: 96, contact: 'talk', drain: 7,
       look: { skin: '#d9a07a', hair: '#7a2e2e', hairStyle: 'bun', top: '#9b4dca', dress: true, acc: 'necklace' },
-      lines: ['So... when is YOUR turn?', 'בקרוב אצלך!', "My neighbor's son is single, he's a dentist.", 'How much do you earn, roughly?', 'You look tired. Are you sleeping?', 'Your cousin is already pregnant!'],
-      chaseLines: ['Yoo-hoo! Sweetie!', 'מותק, רגע!'],
+      lines: ['So... when is YOUR turn?', 'Next time it will be you!', "My neighbor's son is single, he's a dentist.", 'How much do you earn, roughly?', 'You look tired. Are you sleeping?', 'Your cousin is already pregnant!'],
+      chaseLines: ['Yoo-hoo! Sweetie!', 'Sweetie, one second!'],
     },
     grandma: {
-      name: 'Grandma Rivka', he: 'סבתא רבקה', detect: 'cone', range: 240, fov: 1.6, speed: 32, chase: 66, contact: 'talk', drain: 8,
+      name: 'Grandma Rivka', detect: 'cone', range: 240, fov: 1.6, speed: 32, chase: 66, contact: 'talk', drain: 8,
       look: { skin: '#e8bfa0', hair: '#d8d4cf', hairStyle: 'bun', top: '#3f6b5a', dress: true, acc: 'glasses' },
-      lines: ['Eat something, you are so thin!', 'בקרוב אצלך, חמודה', 'When I was your age I had four children.', 'Who are your parents again?', 'Let me tell you about my hip surgery...'],
-      chaseLines: ['Come here, let me see you!', 'בוא לסבתא!'],
+      lines: ['Eat something, you are so thin!', 'Soon by you, darling.', 'When I was your age I had four children.', 'Who are your parents again?', 'Let me tell you about my hip surgery...'],
+      chaseLines: ['Come here, let me see you!', 'Come to Grandma!'],
     },
     friend: {
-      name: 'The Cringe Acquaintance', he: 'החבר הלא רצוי', detect: 'radius', range: 230, speed: 60, chase: 104, contact: 'talk', drain: 4.5, roams: true,
+      name: 'The Cringe Acquaintance', detect: 'radius', range: 230, speed: 60, chase: 104, contact: 'talk', drain: 4.5, roams: true,
       look: { skin: '#c98d65', hair: '#c9a227', hairStyle: 'cap', cap: '#d6432f', top: '#e3e36a', bottom: '#4a5a8a', acc: null },
       lines: ['Bro! Remember me? From the army!', "So I'm starting a crypto podcast...", 'Selfie! One more! One more!', 'Did you hear about the seating chart drama?', "I'm basically family at this point."],
-      chaseLines: ['BRO!', 'אחי! אחי!', 'Wait up!'],
+      chaseLines: ['BRO!', 'Brother! Brother!', 'Wait up!'],
     },
     photographer: {
-      name: 'The Photographer', he: 'הצלם', detect: 'cone', range: 270, fov: 0.75, speed: 58, chase: 70, contact: 'flash',
+      name: 'The Photographer', detect: 'cone', range: 270, fov: 0.75, speed: 58, chase: 70, contact: 'flash',
       look: { skin: '#b97d58', hair: '#1b1b1b', hairStyle: 'short', top: '#1f1f24', bottom: '#1f1f24', acc: 'camera' },
       lines: ['Perfect!', 'Beautiful, one more!'],
-      chaseLines: ['Smile!', 'Look here!', 'חיוך!'],
+      chaseLines: ['Smile!', 'Look here!', 'Say cheese!'],
+    },
+    planner: {
+      name: 'The Wedding Planner', detect: 'cone', range: 220, fov: 1.0, speed: 56, chase: 100, contact: 'talk', drain: 5.5,
+      look: { skin: '#f3d2b8', hair: '#1b1b1b', hairStyle: 'bun', top: '#1f1f24', bottom: '#1f1f24', shirt: '#ffffff', acc: 'headset' },
+      lines: ["You're at the wrong table. Let me walk you through the seating chart.", 'Could you help me carry the centerpieces?', 'The bride wants everyone on the dance floor. Now.', 'Have you signed the guest book? Sign it again.'],
+      chaseLines: ['Excuse me! Guest!', 'You! Table fourteen!'],
+    },
+    kid: {
+      name: 'The Sugar-Rush Kid', detect: 'radius', range: 170, speed: 88, chase: 116, contact: 'bump', roams: true,
+      look: { skin: '#e0ac80', hair: '#5a2e1a', hairStyle: 'curly', top: '#ff8a3d', bottom: '#33468f', acc: 'sparkle' },
+      lines: ["TAG! You're it!", 'I ate six desserts!', 'Sorry! Not sorry!'],
+      chaseLines: ['Wheee!', 'Catch me!', 'Race you!'],
     },
   };
 
@@ -560,6 +572,7 @@
       default: break;
     }
     if (L.acc === 'kippah') R(2.5, 0, 3, 1, '#3a5fcf');
+    if (L.acc === 'headset') { R(0.5, 1, 1, 3, '#222222'); R(1, 3.6, 2.5, 0.6, '#222222'); }
 
     // Face
     if (L.acc === 'sunglasses') {
@@ -659,16 +672,17 @@
   let player = null;
 
   function newStats() {
-    return { canape: 0, main: 0, dessert: 0, drinks: 0, water: 0, convos: 0, escaped: 0, dodged: 0, hugs: 0, flashes: 0 };
+    return { canape: 0, main: 0, dessert: 0, drinks: 0, water: 0, convos: 0, escaped: 0, dodged: 0, hugs: 0, flashes: 0, bumps: 0, gift: false };
   }
 
   function makePlayer(look, archId) {
     return {
       x: 470, y: 540, vx: 0, vy: 0, look, archId, arch: ARCH[archId],
       faceRight: true, moving: false,
-      food: 80, buzz: 0, battery: 100,
+      food: 90, battery: 100,
       held: 0, slow: 0, stun: 0, boost: 0, grace: 1.5,
       hidden: false, talking: null, escape: 0, excuses: 1,
+      gift: true, // carrying the gift envelope; no food or drink until it is dropped off
     };
   }
 
@@ -705,7 +719,7 @@
     game.eventIdx = 0; game.event = EVENTS[0];
     game.floaters = []; game.stats = newStats(); game.won = false;
     game.zoneId = null;
-    game.scoreAcc = 0; game.scoreFrac = 0;
+    game.scoreAcc = 0; game.scoreFrac = 0; game.giftNag = 0;
 
     game.npcs = [
       makeNpc('aunt', 300, 300, 'reception'),
@@ -713,6 +727,8 @@
       makeNpc('grandma', 520, 1130, 'dining'),
       makeNpc('friend', 1200, 720, 'bar'),
       makeNpc('photographer', 1200, 200, 'chuppah'),
+      makeNpc('planner', 800, 1310, 'dining'),
+      makeNpc('kid', 300, 720, 'bar'),
     ];
     game.waiters = [makeWaiter(300, 520, 'canape'), makeWaiter(1300, 1000, 'drink')];
     game.dancers = [];
@@ -801,7 +817,7 @@
 
   /**
    * Raise a drink. In a conversation: spend it as an excuse to leave.
-   * Otherwise: "L'chaim!" makes every chaser nearby lose interest.
+   * Otherwise: "Cheers!" makes every chaser nearby lose interest.
    */
   function action() {
     if (!player) return;
@@ -818,7 +834,7 @@
     if (player.excuses > 0 && chasers.length) {
       player.excuses--;
       chasers.forEach((n) => loseTrack(n, true));
-      addFloater(player.x, player.y - 40, "L'chaim!", '#7fc8ff');
+      addFloater(player.x, player.y - 40, 'Cheers!', '#7fc8ff');
       Sound.sfx('cheers');
     } else if (player.excuses === 0) {
       showToast('No drink in hand', 'Grab one at the bar or from a waiter first.', '', 1.6);
@@ -991,8 +1007,17 @@
       player.vx = 0; player.vy = 0;
       game.stats.convos++;
       $('convo-name').textContent = T.name;
-      $('convo-he').textContent = T.he;
       $('convo').hidden = false;
+    } else if (T.contact === 'bump') {
+      n.state = 'cooldown';
+      n.cd = 6;
+      n.target = null;
+      player.food = Math.max(0, player.food - 12);
+      player.stun = 0.5;
+      game.stats.bumps++;
+      say(n, pick(T.lines), 1.4);
+      addFloater(player.x, player.y - 40, 'Plate knocked! -12 food', '#ff7a9c');
+      Sound.sfx('hug');
     }
   }
 
@@ -1095,8 +1120,6 @@
           const line = pick(T.lines);
           say(n, line, 2.6);
           $('convo-line').textContent = line;
-          const hasRtl = /[֐-׿]/.test(line);
-          $('convo-line').dir = hasRtl ? 'rtl' : 'ltr';
           [0, 0.08, 0.16].forEach((d) => setTimeout(() => Sound.sfx('blip'), d * 1000));
         }
         break;
@@ -1184,16 +1207,15 @@
         p.food += 10 * A.foodMul; p.battery += 4; pts = Math.round((ev === 'dessert' ? 40 : 20) * A.foodMul); game.stats.dessert++;
         Sound.sfx('eat'); break;
       case 'drink':
-        p.buzz += 18; p.boost = 4; p.excuses = Math.min(3, p.excuses + 1);
+        p.battery += 3; p.boost = 4; p.excuses = Math.min(3, p.excuses + 1);
         pts = ev === 'shots' ? 30 : 15; game.stats.drinks++;
         Sound.sfx('drink'); break;
       case 'water':
-        p.buzz -= 25; p.battery += 6; pts = 5; game.stats.water++;
+        p.battery += 6; pts = 5; game.stats.water++;
         Sound.sfx('water'); break;
       default: break;
     }
     p.food = clamp(p.food, 0, 100);
-    p.buzz = clamp(p.buzz, 0, 100);
     p.battery = clamp(p.battery, 0, 100);
     addScore(pts, x, y - 24, v.n + ' +' + pts, kind === 'drink' || kind === 'water' ? '#7fc8ff' : '#f2c46d');
   }
@@ -1212,10 +1234,8 @@
 
     // Meters
     p.food = Math.max(0, p.food - A.hungerDecay * dt);
-    p.buzz = Math.max(0, p.buzz - A.buzzDecay * dt);
     let drain = 0;
     if (p.talking) drain += p.talking.T.drain * A.drainMul;
-    if (p.food <= 0) drain += 1.5;
     let regen = 0;
     if (p.hidden) regen += 2;
     if (inLounge) regen += 3;
@@ -1238,24 +1258,14 @@
     const ilen = Math.hypot(ix, iy);
     if (ilen > 0) { ix /= ilen; iy /= ilen; }
 
-    // Too much buzz: inputs wobble and the floor gets slippery.
-    const tipsy = clamp((p.buzz - 65) / 35, 0, 1);
-    if (tipsy > 0 && ilen > 0) {
-      const wob = Math.sin(game.t * 2.3) * 0.6 * tipsy;
-      const c = Math.cos(wob), s = Math.sin(wob);
-      const nx = ix * c - iy * s, ny = ix * s + iy * c;
-      ix = nx; iy = ny;
-    }
     let sp = A.speed;
-    sp *= 1 + Math.min(p.buzz, 60) / 250;
     if (p.boost > 0) sp *= 1.2;
     if (p.slow > 0) sp *= 0.55;
-    if (p.food <= 0) sp *= 0.75;
-    const accel = 12 - 9.5 * tipsy;
+    const accel = 12;
     const k = Math.min(1, accel * dt);
     p.vx += (ix * sp - p.vx) * k;
     p.vy += (iy * sp - p.vy) * k;
-    if (!canMove && tipsy === 0) { p.vx = 0; p.vy = 0; }
+    if (!canMove) { p.vx = 0; p.vy = 0; }
     if (p.held > 0 || p.talking || p.stun > 0) { p.vx *= 0.5; p.vy *= 0.5; }
     moveActor(p, p.vx * dt, p.vy * dt);
     p.x = clamp(p.x, WALL + 8, WORLD_W - WALL - 8);
@@ -1268,10 +1278,31 @@
     const inFlowers = FLOWERS.some((f) => Math.hypot(f.x - p.x, f.y - p.y) < 24);
     p.hidden = inFlowers && speed < 35 && !p.talking && p.held <= 0;
 
+    // Gift table: guests must drop off their gift before they eat or drink.
+    if (p.gift) {
+      const gt = GIFT_TABLE;
+      const gx = clamp(p.x, gt.x, gt.x + gt.w), gy = clamp(p.y, gt.y, gt.y + gt.h);
+      if (Math.hypot(p.x - gx, p.y - gy) < 24) {
+        p.gift = false;
+        game.stats.gift = true;
+        addScore(50, gt.x + gt.w / 2, gt.y - 24, 'Gift delivered +50', '#f2c46d');
+        showToast('Gift delivered', 'The food, the bar and the waiters are all yours now.', '', 2.5);
+        Sound.sfx('escape');
+      }
+    }
+    game.giftNag = Math.max(0, game.giftNag - dt);
+    const nagGift = () => {
+      if (game.giftNag > 0) return;
+      game.giftNag = 3;
+      showToast('Drop your gift first', 'Follow the gold arrow to the gift table in Reception.', '', 2.2);
+      Sound.sfx('alert');
+    };
+
     // Pickups
     if (!p.talking && p.held <= 0) {
       for (const it of game.items) {
         if (it.active && Math.hypot(it.x - p.x, it.y - p.y) < 20) {
+          if (p.gift) { nagGift(); continue; }
           it.active = false;
           it.timer = RESPAWN[it.kind] * rand(0.8, 1.2);
           consume(it.kind, it.variant, it.x, it.y);
@@ -1279,6 +1310,7 @@
       }
       for (const w of game.waiters) {
         if (w.has && dist(w, p) < 20) {
+          if (p.gift) { nagGift(); continue; }
           w.has = false;
           w.refill = 10;
           say(w, 'Enjoy!', 1.2);
@@ -1328,7 +1360,7 @@
   }
 
   function onEvent(e) {
-    showToast(e.title + ' · ' + e.he, e.desc, 'event', 3.5);
+    showToast(e.title, e.desc, 'event', 3.5);
     Sound.sfx('event');
     switch (e.id) {
       case 'dinner':
@@ -1337,12 +1369,18 @@
         break;
       case 'dance1':
         game.npcs.push(makeNpc('photographer', 1300, 1000, 'dance'));
+        game.npcs.push(makeNpc('kid', 1200, 700, 'bar'));
         break;
       case 'shots':
         game.npcs.push(makeNpc('uncle', 1700, 1250, 'dance'));
+        game.npcs.push(makeNpc('friend', 600, 300, 'reception'));
         break;
       case 'dance2':
         game.npcs.push(makeNpc('aunt', 300, 1320, 'dining'));
+        game.npcs.push(makeNpc('planner', 1300, 1300, 'dance'));
+        break;
+      case 'dessert':
+        game.npcs.push(makeNpc('grandma', 1300, 720, 'bar'));
         break;
       default: break;
     }
@@ -1385,7 +1423,8 @@
     updatePlayer(dt);
     updateWorld(dt);
     updateToast(dt);
-    if (player.battery <= 0) { endGame(false); return; }
+    if (player.food <= 0) { endGame(false, 'food'); return; }
+    if (player.battery <= 0) { endGame(false, 'battery'); return; }
     if (game.elapsed >= NIGHT_SECONDS) endGame(true);
   }
 
@@ -1470,10 +1509,10 @@
     g.textAlign = 'center';
     g.font = '700 11px Rubik, system-ui, sans-serif';
     const sign = (text, x, y, color) => { g.fillStyle = color; g.fillText(text, x, y); };
-    sign('BAR · בר', 320, 700 + 76, '#f2c46d');
-    sign('WC · שירותים', LOUNGE.x + LOUNGE.w / 2, LOUNGE.y + LOUNGE.h - 10, '#d6f1ff');
+    sign('BAR', 320, 700 + 76, '#f2c46d');
+    sign('RESTROOMS', LOUNGE.x + LOUNGE.w / 2, LOUNGE.y + LOUNGE.h - 10, '#d6f1ff');
     sign('Rest here to recharge', LOUNGE.x + LOUNGE.w / 2, LOUNGE.y + LOUNGE.h - 26, '#a9dcdc');
-    sign('Water · מים', 1010, 720, '#d6f1ff');
+    sign('WATER', 1010, 720, '#d6f1ff');
 
     return c;
   }
@@ -1517,7 +1556,7 @@
           g.fillStyle = '#5b3a72';
           g.font = '700 9px Rubik, system-ui, sans-serif';
           g.textAlign = 'center';
-          g.fillText(f.label + ' · ' + f.he, f.x + f.w / 2, f.y + f.h - 8);
+          g.fillText(f.label, f.x + f.w / 2, f.y + f.h - 8);
         }
         break;
       }
@@ -1589,7 +1628,7 @@
         g.fillStyle = '#d8b56a'; g.fillRect(f.x + f.w / 2 - 3, f.y, 6, f.h); g.fillRect(f.x, f.y + f.h / 2 - 3, f.w, 6);
         g.fillStyle = '#1e1529'; g.fillRect(f.x + 14, f.y + 8, 20, 3);
         g.fillStyle = '#5b3a72'; g.font = '700 10px Rubik, system-ui, sans-serif'; g.textAlign = 'center';
-        g.fillText("צ'קים · Gifts", f.x + f.w / 2, f.y - 6);
+        g.fillText('GIFT TABLE', f.x + f.w / 2, f.y - 6);
         break;
       case 'speaker':
         g.fillStyle = '#111111'; g.fillRect(f.x, f.y, f.w, f.h);
@@ -1773,9 +1812,7 @@
     g.fillStyle = '#1d1026';
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    g.direction = /[\u0590-\u05FF]/.test(text) ? 'rtl' : 'ltr';
     g.fillText(text, x, by + h / 2);
-    g.direction = 'ltr';
     g.textBaseline = 'alphabetic';
   }
 
@@ -1845,6 +1882,20 @@
     list.sort((a, b) => a.y - b.y);
     for (const r of list) r.draw();
 
+    // Gift reminder: a bouncing arrow over the gift table and the envelope you carry.
+    if (player && game.state !== 'menu' && player.gift) {
+      const gt = GIFT_TABLE;
+      const ax = gt.x + gt.w / 2, ay = gt.y - 22 + Math.sin(t * 5) * 3;
+      g.fillStyle = '#f2c46d';
+      g.fillRect(ax - 4, ay - 22, 8, 12);
+      g.beginPath(); g.moveTo(ax - 10, ay - 10); g.lineTo(ax + 10, ay - 10); g.lineTo(ax, ay); g.closePath(); g.fill();
+      const ex = Math.round(player.x), ey = Math.round(player.y) - 46;
+      g.fillStyle = '#ffffff'; g.fillRect(ex - 7, ey - 5, 14, 10);
+      g.fillStyle = '#d8b56a';
+      g.beginPath(); g.moveTo(ex - 7, ey - 5); g.lineTo(ex, ey + 1); g.lineTo(ex + 7, ey - 5); g.closePath(); g.fill();
+      g.fillStyle = '#e2557a'; g.fillRect(ex - 1, ey - 1, 3, 3);
+    }
+
     drawCanopy(g, t);
     drawLights(g, t);
 
@@ -1869,16 +1920,6 @@
     }
     g.globalAlpha = 1;
 
-    // Tipsy vignette
-    if (player && game.state !== 'menu' && player.buzz > 65) {
-      g.setTransform(1, 0, 0, 1, 0, 0);
-      const a = clamp((player.buzz - 65) / 35, 0, 1) * 0.35;
-      const grad = g.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.height * 0.3, canvas.width / 2, canvas.height / 2, canvas.height * 0.8);
-      grad.addColorStop(0, 'rgba(255,122,156,0)');
-      grad.addColorStop(1, 'rgba(255,122,156,' + a + ')');
-      g.fillStyle = grad;
-      g.fillRect(0, 0, canvas.width, canvas.height);
-    }
   }
 
   function renderMinimap() {
@@ -1901,6 +1942,10 @@
       g.fillStyle = '#ffffff';
       g.fillRect(Math.round(w.x * s) - 1, Math.round(w.y * s) - 1, 3, 3);
     }
+    if (player && player.gift && Math.floor(game.t * 3) % 2 === 0) {
+      g.strokeStyle = '#f2c46d'; g.lineWidth = 2;
+      g.strokeRect(Math.round(GIFT_TABLE.x * s) - 3, Math.round(GIFT_TABLE.y * s) - 3, Math.round(GIFT_TABLE.w * s) + 6, Math.round(GIFT_TABLE.h * s) + 6);
+    }
     if (player) {
       g.fillStyle = '#f2c46d';
       g.fillRect(Math.round(player.x * s) - 3, Math.round(player.y * s) - 3, 6, 6);
@@ -1911,9 +1956,8 @@
   // 10. HUD & screens
   // ===================================================================
   const hud = {
-    food: $('m-food'), buzz: $('m-buzz'), battery: $('m-battery'),
+    food: $('m-food'), battery: $('m-battery'),
     foodFill: document.querySelector('#m-food .m-fill'),
-    buzzFill: document.querySelector('#m-buzz .m-fill'),
     batteryFill: document.querySelector('#m-battery .m-fill'),
     clock: $('clock'), eventName: $('event-name'), score: $('score'), excuses: $('excuses'), chips: $('chips'),
     cache: {},
@@ -1929,10 +1973,8 @@
   function updateHud() {
     const p = player;
     hud.foodFill.style.width = p.food.toFixed(1) + '%';
-    hud.buzzFill.style.width = p.buzz.toFixed(1) + '%';
     hud.batteryFill.style.width = p.battery.toFixed(1) + '%';
     hud.food.classList.toggle('low', p.food < 20);
-    hud.buzz.classList.toggle('high', p.buzz > 65);
     hud.battery.classList.toggle('low', p.battery < 25);
     setText(hud.clock, 'clock', formatClock(clockMinutes()));
     setText(hud.eventName, 'event', game.event.title);
@@ -1946,11 +1988,11 @@
     if (playerOnDanceFloor()) chips.push(['In the crowd', 'good']);
     if (inRect(p, LOUNGE)) chips.push(['Recharging', 'good']);
     if (p.boost > 0) chips.push(['Drink boost', '']);
-    if (p.buzz > 65) chips.push(['Slippery', 'bad']);
     if (p.held > 0) chips.push(['Hugged', 'bad']);
     if (p.slow > 0 && p.held <= 0) chips.push(['Squished', 'bad']);
     if (p.stun > 0) chips.push(['Blinded', 'bad']);
-    if (p.food <= 0) chips.push(['Starving', 'bad']);
+    if (p.gift) chips.push(['Carrying gift', 'bad']);
+    if (p.food > 0 && p.food < 20) chips.push(['Starving', 'bad']);
     setHtml(hud.chips, 'chips', chips.map(([txt, cls]) => '<span class="chip-s ' + cls + '">' + txt + '</span>').join(''));
 
     if (p.talking) {
@@ -1985,10 +2027,6 @@
     const el = $('zone-label');
     el.innerHTML = '';
     el.append(document.createTextNode(z.name));
-    const small = document.createElement('small');
-    small.lang = 'he';
-    small.textContent = z.he;
-    el.append(small);
     el.classList.add('show');
     clearTimeout(zoneTimer);
     zoneTimer = setTimeout(() => el.classList.remove('show'), 2600);
@@ -2012,7 +2050,7 @@
     cam.x = player.x - view.vw / 2;
     cam.y = player.y - view.vh / 2;
     Sound.startMusic();
-    showToast(EVENTS[0].title + ' · ' + EVENTS[0].he, EVENTS[0].desc, 'event', 4);
+    showToast(EVENTS[0].title, EVENTS[0].desc, 'event', 4);
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   }
 
@@ -2053,15 +2091,16 @@
     showScreen('screen-menu');
   }
 
-  function rankFor(score, won) {
-    if (!won) return 'Sent home early. Uber is on the way.';
+  function rankFor(score, won, reason) {
+    if (!won && reason === 'food') return 'Should have hit the buffet.';
+    if (!won) return 'Sent home early. The taxi is on its way.';
     if (score >= 3000) return 'Legend of the dance floor';
     if (score >= 2000) return 'Seasoned wedding pro';
     if (score >= 1200) return 'Respectable guest';
     return 'Survived, barely';
   }
 
-  function endGame(won) {
+  function endGame(won, reason) {
     game.state = 'over';
     game.won = won;
     Sound.stopMusic();
@@ -2077,9 +2116,10 @@
     const isBest = game.score > best;
     if (isBest) storageSet('ws-best', String(game.score));
 
-    $('sum-eyebrow').textContent = won ? '02:00 · The band is packing up' : formatClock(clockMinutes()) + ' · Social battery empty';
-    $('sum-title').textContent = won ? 'You survived the night' : 'You had to leave early';
-    $('sum-rank').textContent = rankFor(game.score, won);
+    const why = reason === 'food' ? 'Food ran out' : 'Social battery empty';
+    $('sum-eyebrow').textContent = won ? '02:00 · The band is packing up' : formatClock(clockMinutes()) + ' · ' + why;
+    $('sum-title').textContent = won ? 'You survived the night' : reason === 'food' ? 'You fainted from hunger' : 'You had to leave early';
+    $('sum-rank').textContent = rankFor(game.score, won, reason);
     $('sum-score').textContent = String(game.score);
     $('sum-best').textContent = isBest ? 'New personal best' : best ? 'Personal best: ' + best : '';
 
@@ -2093,6 +2133,8 @@
       ['Relatives dodged', st.dodged],
       ['Uncle hugs survived', st.hugs],
       ['Camera flashes', st.flashes],
+      ['Kids crashed into you', st.bumps],
+      ['Gift delivered', st.gift ? 'Yes' : 'No'],
       ['Left the party at', formatClock(clockMinutes())],
     ];
     const dl = $('sum-stats');
