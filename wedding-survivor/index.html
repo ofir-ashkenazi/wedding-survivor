@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wedding Survivor</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A retro top-down browser game: eat, drink and dodge relatives until 02:00.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Silkscreen:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--APP-->
+<div id="app">
+  <canvas id="game" aria-label="Wedding venue, top-down view"></canvas>
+
+  <!-- In-game HUD -->
+  <div id="hud" hidden>
+    <div class="hud-row">
+      <div class="panel meters">
+        <div class="meter" id="m-food">
+          <span class="m-label">Food <i lang="he">אוכל</i></span>
+          <span class="m-track"><span class="m-fill"></span></span>
+        </div>
+        <div class="meter" id="m-buzz">
+          <span class="m-label">Buzz <i lang="he">באזז</i></span>
+          <span class="m-track"><span class="m-fill"></span></span>
+        </div>
+        <div class="meter" id="m-battery">
+          <span class="m-label">Social battery <i lang="he">סוללה חברתית</i></span>
+          <span class="m-track"><span class="m-fill"></span></span>
+        </div>
+        <div id="chips" class="chips"></div>
+      </div>
+      <div class="panel clock-box">
+        <div id="clock">19:30</div>
+        <div id="event-name">Guests arriving</div>
+      </div>
+      <div class="panel score-box">
+        <div class="score-label">Score</div>
+        <div id="score">0</div>
+        <div id="excuses" class="excuses" title="Drinks in hand. Each one is an excuse to leave a conversation."></div>
+      </div>
+      <canvas id="minimap" class="panel" width="160" height="112" aria-label="Venue map"></canvas>
+    </div>
+    <div id="zone-label"></div>
+  </div>
+
+  <div id="toast" hidden>
+    <div id="toast-title"></div>
+    <div id="toast-sub"></div>
+  </div>
+
+  <div id="convo" hidden>
+    <div class="convo-who"><span id="convo-name"></span><span id="convo-he" lang="he" dir="rtl"></span></div>
+    <p id="convo-line"></p>
+    <div class="convo-bar"><span id="convo-fill"></span></div>
+    <p class="convo-hint" id="convo-hint">Mash the arrow keys to wriggle free</p>
+  </div>
+
+  <div id="flash"></div>
+
+  <!-- On-screen touch controls -->
+  <div id="touch" hidden>
+    <div class="dpad">
+      <button type="button" class="pad-up" data-dir="up" aria-label="Move up">&#9650;</button>
+      <button type="button" class="pad-left" data-dir="left" aria-label="Move left">&#9664;</button>
+      <button type="button" class="pad-right" data-dir="right" aria-label="Move right">&#9654;</button>
+      <button type="button" class="pad-down" data-dir="down" aria-label="Move down">&#9660;</button>
+    </div>
+    <div class="touch-right">
+      <button type="button" id="btn-pause" aria-label="Pause">II</button>
+      <button type="button" id="btn-action">L'chaim</button>
+    </div>
+  </div>
+
+  <!-- Character creation -->
+  <section id="screen-menu" class="screen">
+    <div class="card menu-card">
+      <header class="invite">
+        <p class="eyebrow">Noa &amp; Daniel request your survival</p>
+        <h1>Wedding<br>Survivor</h1>
+        <p class="he-title" lang="he" dir="rtl">שורדים את החתונה</p>
+        <p class="lede">Eat everything, dodge every relative, and make it to 02:00 with your social battery intact.</p>
+      </header>
+
+      <form id="creator" class="creator" autocomplete="off">
+        <div class="preview">
+          <canvas id="preview" width="160" height="200" aria-label="Your guest"></canvas>
+          <div id="arch-stats" class="arch-stats"></div>
+        </div>
+
+        <div class="options">
+          <fieldset>
+            <legend>Guest</legend>
+            <div class="chip-row">
+              <label class="chip"><input type="radio" name="gender" id="g-woman" value="woman" checked><span>Woman</span></label>
+              <label class="chip"><input type="radio" name="gender" id="g-man" value="man"><span>Man</span></label>
+              <label class="chip"><input type="radio" name="gender" id="g-nb" value="nb"><span>Non-binary</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Archetype &amp; age</legend>
+            <div class="arch-row">
+              <label class="chip arch"><input type="radio" name="arch" id="a-dancer" value="dancer" checked>
+                <span><b>Young wild dancer</b><small>Age 23 · fast feet, double dance-floor points</small></span></label>
+              <label class="chip arch"><input type="radio" name="arch" id="a-hungry" value="hungry">
+                <span><b>Hungry relative</b><small>Age 56 · food is worth 60% more</small></span></label>
+              <label class="chip arch"><input type="radio" name="arch" id="a-chill" value="chill">
+                <span><b>Chill guest</b><small>Age 34 · small talk drains 35% less</small></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Outfit</legend>
+            <div class="chip-row">
+              <label class="chip"><input type="radio" name="style" id="s-suit" value="suit" checked><span>Suit</span></label>
+              <label class="chip"><input type="radio" name="style" id="s-dress" value="dress"><span>Evening dress</span></label>
+              <label class="chip"><input type="radio" name="style" id="s-party" value="party"><span>Party casual</span></label>
+            </div>
+          </fieldset>
+
+          <div class="swatch-groups">
+            <fieldset>
+              <legend>Color <span id="color-note" class="note"></span></legend>
+              <div class="swatches" id="color-swatches"></div>
+            </fieldset>
+            <fieldset>
+              <legend>Skin tone</legend>
+              <div class="swatches" id="skin-swatches"></div>
+            </fieldset>
+          </div>
+
+          <button type="submit" class="btn-primary" id="btn-start">Enter the venue</button>
+        </div>
+      </form>
+
+      <footer class="controls">
+        <span><kbd>WASD</kbd>/<kbd>Arrows</kbd> move</span>
+        <span><kbd>E</kbd>/<kbd>Space</kbd> raise a drink: escape a talk or shake off chasers</span>
+        <span>Stand still in flowers to hide</span>
+        <span><kbd>P</kbd> pause · <kbd>M</kbd> mute</span>
+      </footer>
+    </div>
+  </section>
+
+  <!-- Pause -->
+  <section id="screen-pause" class="screen" hidden>
+    <div class="card small-card">
+      <p class="eyebrow">Hiding in the restroom</p>
+      <h2>Paused</h2>
+      <div class="actions">
+        <button type="button" class="btn-primary" id="btn-resume">Resume</button>
+        <button type="button" class="btn-ghost" id="btn-mute">Mute sound</button>
+        <button type="button" class="btn-ghost" id="btn-quit">Leave the wedding</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section id="screen-summary" class="screen" hidden>
+    <div class="card small-card">
+      <p class="eyebrow" id="sum-eyebrow">02:00 · The band is packing up</p>
+      <h2 id="sum-title">You survived the night</h2>
+      <p class="rank" id="sum-rank"></p>
+      <div class="final-score">
+        <span>Final score</span>
+        <strong id="sum-score">0</strong>
+        <em id="sum-best"></em>
+      </div>
+      <dl class="stats" id="sum-stats"></dl>
+      <div class="actions">
+        <button type="button" class="btn-primary" id="btn-again">Play again</button>
+        <button type="button" class="btn-ghost" id="btn-change">Change outfit</button>
+      </div>
+    </div>
+  </section>
+</div>
+<!--/APP-->
+<script src="game.js"></script>
+</body>
+</html>
