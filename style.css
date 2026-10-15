@@ -33,6 +33,9 @@
 }
 
 * { box-sizing: border-box; }
+/* Screens and overlays are toggled with the `hidden` attribute; keep it
+   stronger than component rules like `.screen { display: flex }`. */
+[hidden] { display: none !important; }
 html, body { height: 100%; }
 body {
   margin: 0;
